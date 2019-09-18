@@ -96,8 +96,8 @@ def RYScaler(X_mm):
     X_dbz[X_dbz < 0] = 0
 
     # MinMaxScaling
-    c1 = X_dbz.min()
-    c2 = X_dbz.max()
+    c1 = np.nanmin(X_dbz) 
+    c2 = np.nanmax(X_dbz) 
 
     return ((X_dbz - c1) / (c2 - c1) * 255).astype(np.uint8), c1, c2
 
