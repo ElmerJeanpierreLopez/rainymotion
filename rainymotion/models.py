@@ -229,24 +229,19 @@ class Sparse:
         Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
 
     """
-    def __init__(self):
+    def __init__(self, extrapolation="linear", warper='affine', input_data=None, scaler=RYScaler,
+                 inverse_scaler=inv_RYScaler, lead_steps=12,
+                 of_params= {'st_pars': dict(maxCorners=200, qualityLevel=0.2, minDistance=7, blockSize=21),
+                             'lk_pars': dict(winSize=(20, 20), maxLevel=2,
+                                             criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
 
-        self.of_params = {'st_pars': dict(maxCorners=200, qualityLevel=0.2,
-                                          minDistance=7, blockSize=21),
-                          'lk_pars': dict(winSize=(20, 20), maxLevel=2,
-                                          criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}
-
-        self.extrapolation = "linear"
-
-        self.warper = "affine"
-
-        self.input_data = None
-
-        self.scaler = RYScaler
-
-        self.inverse_scaler = inv_RYScaler
-
-        self.lead_steps = 12
+        self.of_params = of_params
+        self.extrapolation = extrapolation
+        self.warper = warper
+        self.input_data = input_data
+        self.scaler = scaler
+        self.inverse_scaler = inverse_scaler
+        self.lead_steps = lead_steps
 
     def run(self):
         """
@@ -378,24 +373,19 @@ class SparseSD:
 
     """
 
-    def __init__(self):
+    def __init__(self, extrapolation="simple_delta", warper='affine', input_data=None, scaler=RYScaler,
+                 inverse_scaler=inv_RYScaler, lead_steps=12, 
+                 of_params = {'st_pars': dict(maxCorners=200, qualityLevel=0.2, minDistance=7, blockSize=21),
+                              'lk_pars': dict(winSize=(20, 20), maxLevel=2,
+                                              criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
 
-        self.of_params = {'st_pars': dict(maxCorners=200, qualityLevel=0.2,
-                                          minDistance=7, blockSize=21),
-                          'lk_pars': dict(winSize=(20, 20), maxLevel=2,
-                                          criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}
-
-        self.extrapolation = "simple_delta"
-
-        self.warper = "affine"
-
-        self.input_data = None
-
-        self.scaler = RYScaler
-
-        self.inverse_scaler = inv_RYScaler
-
-        self.lead_steps = 12
+        self.of_params = of_params
+        self.extrapolation = extrapolation
+        self.warper = warper
+        self.input_data = input_data
+        self.scaler = scaler
+        self.inverse_scaler = inverse_scaler
+        self.lead_steps = lead_steps
 
     def run(self):
         """
@@ -694,22 +684,17 @@ class Dense:
 
     """
 
-    def __init__(self):
+    def __init__(self, input_data=None, scaler=RYScaler, of_method='DIS', direction='backward',
+                advection='constant-vector', interpolation='idw', lead_steps=12):
 
-        self.input_data = None
-
-        self.scaler = RYScaler
-
-        self.lead_steps = 12
-
-        self.of_method = "DIS"
-
-        self.direction = "backward"
-
-        self.advection = "constant-vector"
-
-        self.interpolation = "idw"
-
+        self.input_data = input_data
+        self.scaler = scaler
+        self.of_method = of_method
+        self.direction = direction
+        self.advection = advection
+        self.interpolation = interpolation
+        self.lead_steps = lead_steps
+        
     def run(self):
         """
         Run nowcasting calculations.
@@ -813,21 +798,16 @@ class DenseRotation:
 
     """
 
-    def __init__(self):
+    def __init__(self, input_data=None, scaler=RYScaler, lead_steps=12, of_method='DIS', direction='backward',
+                 advection='semi-lagrangian', interpolation='idw'):
 
-        self.input_data = None
-
-        self.scaler = RYScaler
-
-        self.lead_steps = 12
-
-        self.of_method = "DIS"
-
-        self.direction = "backward"
-
-        self.advection = "semi-lagrangian"
-
-        self.interpolation = "idw"
+        self.input_data = input_data
+        self.scaler = scaler
+        self.lead_steps = lead_times
+        self.of_method = of_method
+        self.direction = direction
+        self.advection = advection
+        self.interpolation = interpolation
 
     def run(self):
         """
@@ -905,11 +885,10 @@ class Persistence:
 
     """
 
-    def __init__(self):
+    def __init__(self, input_data=None, lead_steps=12):
 
-        self.input_data = None
-
-        self.lead_steps = 12
+        self.input_data = input_data
+        self.lead_steps = lead_steps
 
     def run(self):
         """
