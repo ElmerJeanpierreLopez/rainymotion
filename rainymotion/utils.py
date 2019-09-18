@@ -79,7 +79,7 @@ def RYScaler(X_mm):
         '''
         .. based on wradlib.trafo.decibel function
 
-        .. z --> d
+        .. z --> dbz
         '''
         return 10. * np.log10(z)
 
@@ -121,7 +121,7 @@ def inv_RYScaler(X_scl, c1, c2):
         '''
         .. based on wradlib.trafo.idecibel function
 
-        .. d --> z
+        .. dbz --> z
         '''
         return 10. ** (d / 10.)
 
