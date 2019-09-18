@@ -229,11 +229,13 @@ class Sparse:
         Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
 
     """
-    def __init__(self, extrapolation="linear", warper='affine', input_data=None, scaler=RYScaler,
-                 inverse_scaler=inv_RYScaler, lead_steps=12,
-                 of_params= {'st_pars': dict(maxCorners=200, qualityLevel=0.2, minDistance=7, blockSize=21),
-                             'lk_pars': dict(winSize=(20, 20), maxLevel=2,
-                                             criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
+
+    def __init__(self, extrapolation="linear", warper='affine', input_data=None,
+                 scaler=RYScaler, inverse_scaler=inv_RYScaler, lead_steps=12,
+                 of_params={'st_pars': dict(maxCorners=200, qualityLevel=0.2,
+                                            minDistance=7, blockSize=21),
+                            'lk_pars': dict(winSize=(20, 20), maxLevel=2,
+                                            criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
 
         self.of_params = of_params
         self.extrapolation = extrapolation
@@ -373,11 +375,13 @@ class SparseSD:
 
     """
 
-    def __init__(self, extrapolation="simple_delta", warper='affine', input_data=None, scaler=RYScaler,
-                 inverse_scaler=inv_RYScaler, lead_steps=12, 
-                 of_params = {'st_pars': dict(maxCorners=200, qualityLevel=0.2, minDistance=7, blockSize=21),
-                              'lk_pars': dict(winSize=(20, 20), maxLevel=2,
-                                              criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
+    def __init__(self, extrapolation="simple_delta", warper='affine',
+                 input_data=None, scaler=RYScaler, lead_steps=12,
+                 inverse_scaler=inv_RYScaler,
+                 of_params={'st_pars': dict(maxCorners=200, qualityLevel=0.2,
+                                            minDistance=7, blockSize=21),
+                            'lk_pars': dict(winSize=(20, 20), maxLevel=2,
+                                            criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}):
 
         self.of_params = of_params
         self.extrapolation = extrapolation
@@ -464,7 +468,8 @@ def _fill_holes(of_instance, threshold=0):
                                                  range(of_instance.shape[0]))
 
     # source
-    coord_source_i, coord_source_j = coord_target_i[~zero_holes], coord_target_j[~zero_holes]
+    coord_source_i = coord_target_i[~zero_holes]
+    coord_source_j = coord_target_j[~zero_holes]
     delta_x_source = of_instance[::, ::, 0][~zero_holes]
     delta_y_source = of_instance[::, ::, 1][~zero_holes]
 
@@ -521,7 +526,9 @@ def _calculate_of(data_instance,
 
     if method in ["Farneback", "SimpleFlow"]:
         # variational refinement
-        delta = cv2.optflow.createVariationalFlowRefinement().calc(prev_frame, next_frame, delta)
+        delta = cv2.optflow.createVariationalFlowRefinement().calc(prev_frame,
+                                                                   next_frame,
+                                                                   delta)
         delta = np.nan_to_num(delta)
         delta = _fill_holes(delta)
 
@@ -643,7 +650,7 @@ class Dense:
     Attributes
     ----------
     input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for
-    previous hours. "frames" dimension must be > 2.
+                previous hours. "frames" dimension must be > 2.
 
     scaler: function, default=rainymotion.utils.RYScaler
         Corner identification and optical flow algorithms require specific data
@@ -684,8 +691,9 @@ class Dense:
 
     """
 
-    def __init__(self, input_data=None, scaler=RYScaler, of_method='DIS', direction='backward',
-                advection='constant-vector', interpolation='idw', lead_steps=12):
+    def __init__(self, input_data=None, scaler=RYScaler, of_method='DIS',
+                 direction='backward', advection='constant-vector',
+                 interpolation='idw', lead_steps=12):
 
         self.input_data = input_data
         self.scaler = scaler
@@ -694,7 +702,7 @@ class Dense:
         self.advection = advection
         self.interpolation = interpolation
         self.lead_steps = lead_steps
-        
+
     def run(self):
         """
         Run nowcasting calculations.
@@ -740,7 +748,7 @@ class DenseRotation:
     To run your nowcasting model you first have to set up a class instance
     as follows:
 
-    `model = Dense()`
+    `model = DenseRotation()`
 
     and then use class attributes to set up model parameters, e.g.:
 
@@ -798,7 +806,8 @@ class DenseRotation:
 
     """
 
-    def __init__(self, input_data=None, scaler=RYScaler, lead_steps=12, of_method='DIS', direction='backward',
+    def __init__(self, input_data=None, scaler=RYScaler, lead_steps=12,
+                 of_method='DIS', direction='backward',
                  advection='semi-lagrangian', interpolation='idw'):
 
         self.input_data = input_data
